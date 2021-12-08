@@ -1,0 +1,1 @@
+docker run --name nginx-js -d -p 8080:80 nginx-js
