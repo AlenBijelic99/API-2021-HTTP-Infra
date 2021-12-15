@@ -10,13 +10,13 @@ app.get('/', (req, res) => {
 
 app.get('/dad', (req, res) =>{
   Joke.getRandomDadJoke (function(joke) {
-    res.send(joke)
+    res.json({ text: joke})
   });
 })
 
 app.get('/chucknorris', (req, res) =>{
   Joke.getRandomCNJoke (function(joke) {
-    res.send(joke)
+    res.json({ text: joke})
   });
 })
 
@@ -24,14 +24,14 @@ app.get('/custom', (req, res) =>{
   var firstname = req.query.firstname
   var lastname = req.query.lastname
   Joke.getCustomJoke (firstname, lastname, function(joke) {
-    res.send(joke)
+    res.json({ text: joke})
   });
 })
 
 app.get('/category/:category', (req, res) =>{
   var category = req.params.category
   Joke.getRandomJokeOfTheDay (category, function(joke) {
-    res.send(joke)
+    res.json({ text: joke})
   });
 })
 
