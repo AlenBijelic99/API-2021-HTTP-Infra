@@ -9,6 +9,8 @@
   "author": "Alen Bijelic",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "give-me-a-joke": "^0.5.1",
+    "inspirational-quotes": "^2.0.1"
   }
 }
