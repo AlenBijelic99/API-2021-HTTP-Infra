@@ -1,10 +1,13 @@
-FROM php:5.6-apache
+FROM php:7.4-apache
 
-RUN ["apt-get", "update"]
-RUN ["apt-get", "install", "-y", "vim"]
+EXPOSE 80
+
+RUN apt-get update &&\
+    apt-get install -y vim
 
 COPY apache2-foreground /usr/local/bin/
-WORKDIR /var/www/html
+COPY templates /var/apache2/templates
+COPY conf/ /etc/apache2
 
 COPY conf/ /etc/apache2
 
