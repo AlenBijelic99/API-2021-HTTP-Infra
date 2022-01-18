@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+# Add setup for API lab
+echo "Setup for the API lab..."
+echo "Static app URL: $STATIC_APP"
+echo "Dynamic app URL: $DYNAMIC_APP"
+
+rm -f /var/run/apache2/apache2.pid
+
+exec apache2 -DFOREGROUND
