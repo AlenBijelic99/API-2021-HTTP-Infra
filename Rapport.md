@@ -23,36 +23,28 @@ The third objective is to practice our usage of **Docker**. All the components o
 * Check out the **due dates** on the main repo for the course.
 
 
-## Step 1: Static HTTP server with apache httpd
+## Step 1: Static HTTP server with nginx
 
-### Webcasts
+For this step, unlike in videos, we decided to use nginx to try it out.
 
-* [Labo HTTP (1): Serveur apache httpd "dockerisé" servant du contenu statique](https://www.youtube.com/watch?v=XFO4OmcfI3U)
+As it is a basic website using a template, the main objective here is to copy files from our PC to the container. For it we use the COPY command in the Dockerfile.
 
-### Acceptance criteria
+The template that we use is free to use and was found [here](https://bootstrapmade.com/knight-free-bootstrap-theme/)
 
-* You have a GitHub repo with everything needed to build the Docker image.
-* You can do a demo, where you build the image, run a container and access content from a browser.
-* You have used a nice looking web template, different from the one shown in the webcast.
-* You are able to explain what you do in the Dockerfile.
-* You are able to show where the apache config files are located (in a running container).
-* You have **documented** your configuration in your report.
+We also want to read and edit file from SSH connection so we need to install vim.
+
+In the nginx-js-image directory, you will find the scripts to build the image, run the container and connect to the container.
 
 ## Step 2: Dynamic HTTP server with express.js
 
-### Webcasts
+For the express app, we had to create a REST API giving some information. We decided to use [give-me-a-joke](https://www.npmjs.com/package/give-me-a-joke) package to generate different kinds off jokes.
 
-* [Labo HTTP (2a): Application node "dockerisée"](https://www.youtube.com/watch?v=fSIrZ0Mmpis)
-* [Labo HTTP (2b): Application express "dockerisée"](https://www.youtube.com/watch?v=o4qHbf_vMu0)
-
-### Acceptance criteria
-
-* You have a GitHub repo with everything needed to build the Docker image.
-* You can do a demo, where you build the image, run a container and access content from a browser.
-* You generate dynamic, random content and return a JSON payload to the client.
-* You cannot return the same content as the webcast (you cannot return a list of people).
-* You don't have to use express.js; if you want, you can use another JavaScript web framework or event another language.
-* You have **documented** your configuration in your report.
+Our API has 5 different endpoints:
+* / : Is the index page and explains how our API works
+* /dad: returns a dad joke
+* /chucknorris: returns a chucknorris joke
+* /custom: returns a custom joke. The user needs to add his firstname and lastname in the request
+* /category/:category : returns a categorised joke. Categories available are explained in index page
 
 
 ## Step 3: Reverse proxy with apache (static configuration)
