@@ -29,22 +29,23 @@ Our API has 5 different endpoints:
 
 ## Step 3: Reverse proxy with apache (static configuration)
 
-*To build a simple reverse proxy we need to configure the Dockerfile in the following way
-FROM php:5.6-apache
+To build a simple reverse proxy we need to configure the Dockerfile in the following way
 
-COPY conf/ /etc/apache2
+	FROM php:5.6-apache
 
-RUN a2enmod proxy proxy_http
-RUN a2ensite 000-* 001-*
+	COPY conf/ /etc/apache2
 
-*Then we need to configure the file 000-default.conf
+	RUN a2enmod proxy proxy_http
+	RUN a2ensite 000-* 001-*
 
-<VirtualHost *:80>
-</VirtualHost>
+Then we need to configure the file 000-default.conf
 
-*And the file 001-reverse-proxy.conf to use the reverse proxy
+	<VirtualHost *:80>
+	</VirtualHost>
 
-<VirtualHost *:80>
+And the file 001-reverse-proxy.conf to use the reverse proxy
+
+	<VirtualHost *:80>
 	ServerName demo.api.ch
 	
 	ProxyPass "/api/quotes/" "http://172.17.0.3:3000/"
@@ -52,40 +53,45 @@ RUN a2ensite 000-* 001-*
 	
 	ProxyPass "/" "http://172.17.0.2:80/"
 	ProxyPassReverse "/" "http://172.17.0.2:80/"
-</VirtualHost>
+	</VirtualHost>
 
-###Build the docker image from each root
+### Build the docker image from each root
 
-Docker build -t api/nginx_static .
-Docker build -t api/express_dynamic .
-Docker build -t api/apache_rp .
+	Docker build -t api/nginx_static .
+	Docker build -t api/express_dynamic .
+	Docker build -t api/apache_rp .
 
-###Run the container
-*Since in this step we hard-coded the IP adress for the reverse proxy, for our configuration to work and to get the ip addresses that correspond to the right containers, 
-*the containers must be launched in the following order
+### Run the container
+Since in this step we hard-coded the IP adress for the reverse proxy, for our configuration to work and to get the ip addresses that correspond to the right containers, 
+the containers must be launched in the following order
 
-Docker run -d --name nginx_static api/nginx_static
-Docker run -d --name express_dynamic api/express_dynamic
-Docker run -d -p 8080:80 --name apache_rp api/apache_rp
+	Docker run -d --name nginx_static api/nginx_static
+	Docker run -d --name express_dynamic api/express_dynamic
+	Docker run -d -p 8080:80 --name apache_rp api/apache_rp
 
-*to access our site, go to the following page demo.api.ch:8080
+to access our site, go to the following page demo.api.ch:8080
 
-*Configuring the reverse proxy in this way is very dangerous as it would be enough that a container is already running on docker and our entire configuration would fail.
+Configuring the reverse proxy in this way is very dangerous as it would be enough that a container is already running on docker and our entire configuration would fail.
 
 
 
 ## Step 4: AJAX requests with JQuery
 
-*In this step we want to send a request from the static server to the dynamic server and affect the data that we get from the dynamic server to the HTML page on the static server.
-*In a nginx server the directory to find the index.html and js are the following:
-usr/share/nginx/html
-usr/share/nginx/html/assets/js
-*We changed the index.html to add some id to our place where we want to change the text with quotes.
-<h3 id="quote" data-aos="fade-up">Quotes</h2>
-*To send a AJAX request we need a JavaScript to do the request, so in the directory /js we created quotes.js
-(function($){
-        console.log("Loading quotes");
+In this step we want to send a request from the static server to the dynamic server and affect the data that we get from the dynamic server to the HTML page on the static server.
+In a nginx server the directory to find the index.html and js are the following:
 
+	usr/share/nginx/html
+	usr/share/nginx/html/assets/js
+
+We changed the index.html to add some id to our place where we want to change the text with quotes.
+
+	<h3 id="quote" data-aos="fade-up">Quotes</h2>
+
+To send a AJAX request we need a JavaScript to do the request, so in the directory /js we created quotes.js
+
+
+	(function($){
+        console.log("Loading quotes");
         function loadQuotes() {
                 $.getJSON( "/api/quotes/chucknorris/", function (quotes) {
                         console.log(quotes.text);
@@ -95,25 +101,25 @@ usr/share/nginx/html/assets/js
         };
         loadQuotes();
         setInterval (loadQuotes, 5000);
-})(jQuery);
+	})(jQuery);
 
-*This function takes Chuck Norris quotes and it replace every 5 seconds in our HTML page the tags whose id is #quote
+This function takes Chuck Norris quotes and it replace every 5 seconds in our HTML page the tags whose id is #quote
 
 ###Build the docker image from each root
 
-Docker build -t api/nginx_static .
-Docker build -t api/express_dynamic .
-Docker build -t api/apache_rp .
+	Docker build -t api/nginx_static .
+	Docker build -t api/express_dynamic .
+	Docker build -t api/apache_rp .
 
 ###Run the container
-*Since in this step we still have hard-coded the IP adress for the reverse proxy, for our configuration to work and to get the ip addresses that correspond to the right containers, 
-*the containers must be launched in the following order
+Since in this step we still have hard-coded the IP adress for the reverse proxy, for our configuration to work and to get the ip addresses that correspond to the right containers, 
+the containers must be launched in the following order
 
-Docker run -d --name nginx_static api/nginx_static
-Docker run -d --name express_dynamic api/express_dynamic
-Docker run -d -p 8080:80 --name apache_rp api/apache_rp
+	Docker run -d --name nginx_static api/nginx_static
+	Docker run -d --name express_dynamic api/express_dynamic
+	Docker run -d -p 8080:80 --name apache_rp api/apache_rp
 
-*to access our site, go to the following page demo.api.ch:8080
+to access our site, go to the following page demo.api.ch:8080
 
 ## Step 5: Dynamic reverse proxy configuration
 
