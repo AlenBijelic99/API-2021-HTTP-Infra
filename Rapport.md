@@ -142,4 +142,4 @@ Now we modify our Dockerfile to enable the copy of our PHP script which will aut
 We also introduce a new file: apache2-foreground which will contain our IP addresses, that will be fullify by the PHP script when running the container.
 The IP addresses are stored in these variables: STATIC_APP and DYNAMIC_APP.
 
-The website will always work as before except if we change one of our container IP address, these changes will automatically be applied to the dynamic reverse proxy.
+The website will always work as before except if we change one of our container IP address, these changes will automatically be applied when running the container and specifying the new IP addresses.
